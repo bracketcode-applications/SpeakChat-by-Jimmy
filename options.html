@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SpeechChat para Tango.me</title>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    label { display: block; margin-top: 10px; }
+    input[type="text"], input[type="number"] { width: 100%; padding: 8px; margin: 5px 0; }
+    select { width: 100%; padding: 8px; margin: 5px 0; }
+  </style>
+</head>
+<body>
+  <h1>SpeechChat para Tango.me</h1>
+  <label for="voiceSelect">Seleccionar voz:</label>
+  <select id="voiceSelect"></select>
+  
+  <h2>Configuración de mensajes de regalos</h2>
+  <div>
+    <label for="coinRange1">Rango de monedas 1:</label>
+    <input type="number" id="coinRange1Min" placeholder="Mínimo">
+    <input type="number" id="coinRange1Max" placeholder="Máximo">
+    <label for="giftMessage1">Mensaje para el rango 1:</label>
+    <input type="text" id="giftMessage1">
+  </div>
+  <div>
+    <label for="coinRange2">Rango de monedas 2:</label>
+    <input type="number" id="coinRange2Min" placeholder="Mínimo">
+    <input type="number" id="coinRange2Max" placeholder="Máximo">
+    <label for="giftMessage2">Mensaje para el rango 2:</label>
+    <input type="text" id="giftMessage2">
+  </div>
+  <div>
+    <label for="coinRange3">Rango de monedas 3:</label>
+    <input type="number" id="coinRange3Min" placeholder="Mínimo">
+    <input type="number" id="coinRange3Max" placeholder="Máximo">
+    <label for="giftMessage3">Mensaje para el rango 3:</label>
+    <input type="text" id="giftMessage3">
+  </div>
+  
+  <button id="saveBtn">Guardar</button>
+  <script src="options.js"></script>
+</body>
+</html>

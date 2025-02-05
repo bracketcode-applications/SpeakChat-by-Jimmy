@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "SpeechChat para Tango.me",
+  "version": "1.0",
+  "description": "Captura mensajes del chat con nombre de usuario y los envía al servidor, incluyendo notificaciones de regalos.",
+  "permissions": ["storage", "activeTab", "scripting"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "options.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://tango.me/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "options_page": "options.html"
+}
