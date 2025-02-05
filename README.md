@@ -2,9 +2,15 @@
 Developed by [jimmydragon96](https://github.com/jimmydragon96) || Desarrollado por [jimmydragon96](https://github.com/jimmydragon96) 
 
 ## About
-This is a custom text-chat to speech extension intended to work with Chromium based browsers. This was originally developed by [jimmydragon96](https://github.com/jimmydragon96) for use for Tango.me social media app, but can be utilized for other use cases as well.
+This is a custom text-chat to speech extension intended to work with Chromium based browsers. This was originally developed by [jimmydragon96](https://github.com/jimmydragon96) for use for Tango.me social media app, but can be utilized for other use cases as well. 
 
-Esta es una extensión de chat de texto a voz personalizada diseñada para funcionar con navegadores basados ​​en Chromium. Esto fue desarrollado originalmente por [jimmydragon96](https://github.com/jimmydragon96) para su uso en la aplicación de redes sociales Tango.me, pero también se puede utilizar para otros casos de uso.
+DISCLAIMER: This extension is not officially indorsed by Tango.me
+
+---
+
+Esta es una extensión de chat de texto a voz personalizada diseñada para funcionar con navegadores basados ​​en Chromium. Esto fue desarrollado originalmente por [jimmydragon96](https://github.com/jimmydragon96) para su uso en la aplicación de redes sociales Tango.me, pero también se puede utilizar para otros casos de uso. 
+
+DESCARGO DE RESPONSABILIDAD: Esta extensión no está respaldada oficialmente por Tango.me
 
 ## User Instructions | Instrucciones de uso
 #### English
