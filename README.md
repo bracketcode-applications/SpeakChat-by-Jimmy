@@ -2,7 +2,9 @@
 Developed by [jimmydragon96](https://github.com/jimmydragon96) || Desarrollado por [jimmydragon96](https://github.com/jimmydragon96) 
 
 ## About
-This is a custom Speech Chat Extension.
+This is a custom text-chat to speech extension intended to work with Chromium based browsers.
+
+Esta es una extensión de chat de texto a voz personalizada diseñada para funcionar con navegadores basados ​​en Chromium.
 
 ## User Instructions | Instrucciones de uso
 #### English
