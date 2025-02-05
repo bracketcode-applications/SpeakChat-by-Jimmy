@@ -1,4 +1,4 @@
-# Speechchat Extension
+# Text Chat to Speech Extension for Tango.me
 Developed by [jimmydragon96](https://github.com/jimmydragon96) || Desarrollado por [jimmydragon96](https://github.com/jimmydragon96) 
 
 ## About
