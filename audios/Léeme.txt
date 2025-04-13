@@ -1,0 +1,27 @@
+*** Instrucciones para cargar tus clips de audios ***
+
+Sigue estos pasos para que tu extensión reproduzca tus propios clips de audio cada vez que alguien envíe un regalo:
+
+1) Prepara tus archivos de audio:
+  - Asegúrate de que tus clips estén en formato .mp3 y que sean cortos (máx. 30 seg.)
+  - Elige un máximo de 5 archivos de audio que quieras usar.
+
+2) Renombra tus archivos:
+  - Cambia el nombre de tus archivos siguiendo esta estructura:
+     "audio0.mp3"
+     "audio1.mp3"
+     "audio2.mp3"
+     "audio3.mp3"
+     "audio4.mp3"
+  - Ejemplo: Si tienes un audio llamado gracias.mp3, renómbralo a audio0.mp3.
+
+3) Ubica la carpeta de la extensión:
+
+  - Abre la carpeta donde tienes instalada tu extensión del chatbot.
+  - Dentro de esa carpeta, busca la subcarpeta llamada AUDIOS.
+
+4) Coloca los archivos:
+  - Copia y pega los archivos renombrados dentro de la carpeta AUDIOS.
+  - Asegúrate de que no haya archivos adicionales dentro de esa carpeta.
+
+¡Listo! Tu extensión ya está configurada para reproducir esos clips cada vez que alguien envíe un regalo.
