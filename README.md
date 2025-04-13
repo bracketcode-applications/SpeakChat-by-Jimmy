@@ -1,5 +1,6 @@
-# SpeakChat By Jimmy
-Developed by [jimmydragon96](https://github.com/jimmydragon96) || Desarrollado por [jimmydragon96](https://github.com/jimmydragon96) 
+# SpeakChat By Jimmy 
+Developed by [jimmydragon96](https://github.com/jimmydragon96) || Desarrollado por [jimmydragon96](https://github.com/jimmydragon96) <br />
+[Website](https://speakchat.net/) | | [Sito web](https://speakchat.net/)
 
 ## About
 This is a custom text-chat to speech extension intended to work with Chromium based browsers. This was originally developed by [jimmydragon96](https://github.com/jimmydragon96) for use on the Tango social media app, but can be utilized for other use cases as well.
