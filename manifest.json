@@ -1,30 +1,42 @@
 {
   "manifest_version": 3,
-  "name": "SpeechChat para Tango.me",
-  "version": "1.0",
-  "description": "Captura mensajes del chat con nombre de usuario y los envía al servidor, incluyendo notificaciones de regalos.",
-  "permissions": ["storage", "activeTab", "scripting"],
+  "name": "Tango.me Chat Speaker Pro",
+  "version": "2.2",
+  "description": "Lee mensajes y regalos en Tango.me con voces personalizables y efectos de audio",
+  "permissions": [
+    "storage",
+    "tts"
+  ],
+  "host_permissions": [
+    "https://tango.me/*"
+  ],
+  "web_accessible_resources": [{
+    "resources": [
+      "audios/audio0.mp3",
+      "audios/audio1.mp3",
+      "audios/audio2.mp3",
+      "audios/audio3.mp3",
+      "audios/audio4.mp3"
+    ],
+    "matches": ["https://tango.me/*"]
+  }],
   "background": {
     "service_worker": "background.js"
-  },
-  "action": {
-    "default_popup": "options.html",
-    "default_icon": {
-      "16": "icons/icon16.png",
-      "48": "icons/icon48.png",
-      "128": "icons/icon128.png"
-    }
   },
   "content_scripts": [
     {
       "matches": ["https://tango.me/*"],
-      "js": ["content.js"]
+      "js": ["content.js"],
+      "run_at": "document_end"
     }
   ],
-  "icons": {
-    "16": "icons/icon16.png",
-    "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "128": "icon.png"
+    }
   },
-  "options_page": "options.html"
+  "icons": {
+    "128": "icon.png"
+  }
 }

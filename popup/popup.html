@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Tango Speaker Config</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><span class="gradient-text">Tango</span> Speaker</h1>
+      <label class="theme-switch">
+        <input type="checkbox" id="themeToggle">
+        <span class="slider"></span>
+      </label>
+    </header>
+
+    <!-- Selector de Voz -->
+    <div class="card">
+      <h2>Configuración de Voz</h2>
+      <div class="form-group">
+        <label>Voz Seleccionada:</label>
+        <select id="voiceSelect" class="styled-select">
+          <option value="">Cargando voces...</option>
+        </select>
+        <button id="testVoiceBtn" class="btn-secondary">
+          <i class="material-icons">play_arrow</i> Probar Voz
+        </button>
+      </div>
+    </div>
+
+    <!-- Configuración de Regalos -->
+    <div class="card">
+      <h2>Mensajes de Regalos</h2>
+      
+      <!-- Rango 1 -->
+      <div class="gift-range">
+        <div class="range-inputs">
+          <div class="input-group">
+            <label>Mínimo:</label>
+            <input type="number" id="rangeMin1" min=" " value=" ">
+          </div>
+          <div class="input-group">
+            <label>Máximo:</label>
+            <input type="number" id="rangeMax1" min=" " value=" ">
+          </div>
+        </div>
+        <div class="input-group">
+          <label>Mensaje:</label>
+          <input type="text" id="message1" value="¡Qué generosidad!">
+        </div>
+        <div class="input-group">
+          <label>Efecto de Audio:</label>
+          <select id="audioSelect1" class="styled-select">
+            <option value="">Ninguno</option>
+          </select>
+          <button class="btn-audio-test" data-audio-select="audioSelect1">
+            <i class="material-icons">volume_up</i> Probar
+          </button>
+        </div>
+      </div>
+
+      <!-- Rango 2 -->
+      <div class="gift-range">
+        <div class="range-inputs">
+          <div class="input-group">
+            <label>Mínimo:</label>
+            <input type="number" id="rangeMin2" min=" " value=" ">
+          </div>
+          <div class="input-group">
+            <label>Máximo:</label>
+            <input type="number" id="rangeMax2" min=" " value=" ">
+          </div>
+        </div>
+        <div class="input-group">
+          <label>Mensaje:</label>
+          <input type="text" id="message2" value="¡Impresionante regalo!">
+        </div>
+        <div class="input-group">
+          <label>Efecto de Audio:</label>
+          <select id="audioSelect2" class="styled-select">
+            <option value="">Ninguno</option>
+          </select>
+          <button class="btn-audio-test" data-audio-select="audioSelect2">
+            <i class="material-icons">volume_up</i> Probar
+          </button>
+        </div>
+      </div>
+
+      <!-- Rango 3 -->
+      <div class="gift-range">
+        <div class="range-inputs">
+          <div class="input-group">
+            <label>Mínimo:</label>
+            <input type="number" id="rangeMin3" min=" " value=" ">
+          </div>
+          <div class="input-group">
+            <label>Máximo:</label>
+            <input type="number" id="rangeMax3" min=" " value=" ">
+          </div>
+        </div>
+        <div class="input-group">
+          <label>Mensaje:</label>
+          <input type="text" id="message3" value="¡Espectacular regalo!">
+        </div>
+        <div class="input-group">
+          <label>Efecto de Audio:</label>
+          <select id="audioSelect3" class="styled-select">
+            <option value="">Ninguno</option>
+          </select>
+          <button class="btn-audio-test" data-audio-select="audioSelect3">
+            <i class="material-icons">volume_up</i> Probar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <button id="saveBtn" class="btn-primary">
+      <i class="material-icons">save</i> Guardar Configuración
+    </button>
+    <div id="status" class="status-message"></div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
