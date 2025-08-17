@@ -1,4 +1,4 @@
-# SpeakChat By Jimmy 
+# SpeakChat By Jimmy v3.0
 Developed by [jimmydragon96](https://github.com/jimmydragon96) || Desarrollado por [jimmydragon96](https://github.com/jimmydragon96) <br />
 [Website](https://speakchat.net/) | | [Sito web](https://speakchat.net/)
 
@@ -6,6 +6,11 @@ Developed by [jimmydragon96](https://github.com/jimmydragon96) || Desarrollado p
 This is a custom text-chat to speech extension intended to work with Chromium based browsers. This was originally developed by [jimmydragon96](https://github.com/jimmydragon96) for use on the Tango social media app, but can be utilized for other use cases as well.
 
 Esta es una extensión de chat de texto a voz personalizada diseñada para funcionar con navegadores basados ​​en Chromium. Esto fue desarrollado originalmente por [jimmydragon96](https://github.com/jimmydragon96) para su uso en la aplicación de redes sociales Tango, pero también se puede utilizar para otros casos de uso.
+
+## Changes | Cambios
+- Actualizado para nuevos regalos de tango.
+- Modo Gifter (hablan solo los que envien regalos)
+- Controles para Volumen, Velocidad y Tono de voz.
 
 ## User Instructions | Instrucciones de uso
 

@@ -1,0 +1,19 @@
+tango-chat-speaker-pro/
+│
+├── audios/                   # Carpeta con los efectos de audio
+│   ├── audio0.mp3            # Audio para rango 1 (ej. aplausos)
+│   ├── audio1.mp3            # Audio para rango 2 (ej. campanas)
+│   ├── audio2.mp3            # Audio para rango 3 (ej. fanfarria)
+│   ├── audio3.mp3            # Audio extra (opcional)
+│   └── audio4.mp3            # Audio extra (opcional)
+│
+├── popup/                    # Carpeta de la interfaz
+│   ├── popup.html            # Estructura HTML del popup
+│   ├── popup.css             # Estilos CSS modernos
+│   └── popup.js              # Lógica del popup (temas, configuración)
+│
+├── icon.png                  # Icono de la extensión (128x128)
+│
+├── content.js                # Script principal para Tango.me
+├── background.js             # Script de fondo (eventos)
+└── manifest.json             # Configuración de la extensión
