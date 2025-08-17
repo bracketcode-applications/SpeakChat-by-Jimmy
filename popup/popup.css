@@ -1,3 +1,5 @@
+/* popup.css */
+/* Este archivo contiene los estilos CSS para la interfaz del popup de la extensión. */
 :root {
   /* Colores Tango */
   --tango-purple: #9a08f2;
@@ -26,10 +28,11 @@ body {
   font-family: 'Poppins', sans-serif;
   margin: 0;
   padding: 0;
-  min-width: 380px;
+  min-width: 320px;
   background-color: var(--bg-color);
   color: var(--text-color);
   line-height: 1.5;
+  font-size: 13px;
 }
 
 body.dark-mode {
@@ -41,23 +44,25 @@ body.dark-mode {
 }
 
 .container {
-  padding: 20px;
+  padding: 15px;
 }
 
-/* Header */
+/* Header Compacto */
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 25px;
-  padding-bottom: 15px;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
   border-bottom: 1px solid var(--border-color);
+  gap: 10px;
 }
 
 h1 {
   margin: 0;
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .gradient-text {
@@ -67,12 +72,13 @@ h1 {
   color: transparent;
 }
 
-/* Switch Tema */
+/* Switch Tema Compacto */
 .theme-switch {
   position: relative;
   display: inline-block;
-  width: 50px;
-  height: 24px;
+  width: 40px;
+  height: 20px;
+  flex-shrink: 0;
 }
 
 .theme-switch input {
@@ -81,7 +87,7 @@ h1 {
   height: 0;
 }
 
-.slider {
+.theme-switch .slider {
   position: absolute;
   cursor: pointer;
   top: 0;
@@ -90,60 +96,74 @@ h1 {
   bottom: 0;
   background-color: #ccc;
   transition: .4s;
-  border-radius: 24px;
+  border-radius: 20px;
 }
 
-.slider:before {
+.theme-switch .slider:before {
   position: absolute;
   content: "";
-  height: 16px;
-  width: 16px;
-  left: 4px;
-  bottom: 4px;
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
   background-color: white;
   transition: .4s;
   border-radius: 50%;
 }
 
-input:checked + .slider {
+.theme-switch input:checked + .slider {
   background: linear-gradient(45deg, var(--tango-purple), var(--tango-pink));
 }
 
-input:checked + .slider:before {
-  transform: translateX(26px);
+.theme-switch input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+/* Switch Modo Gifter */
+.switch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.switch-label {
+  font-size: 12px;
+  color: var(--text-color);
+  line-height: 1.3;
 }
 
 /* Cards */
 .card {
   background: var(--card-bg);
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   border: 1px solid var(--border-color);
 }
 
 .card h2 {
   margin-top: 0;
-  margin-bottom: 15px;
-  font-size: 16px;
+  margin-bottom: 12px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-color);
 }
 
 /* Formularios */
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 12px;
 }
 
 .input-group {
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 label {
   display: block;
-  margin-bottom: 6px;
-  font-size: 13px;
+  margin-bottom: 5px;
+  font-size: 12px;
   font-weight: 500;
   color: var(--text-color);
 }
@@ -152,28 +172,73 @@ input[type="number"],
 input[type="text"],
 .styled-select {
   width: 100%;
-  padding: 10px 12px;
-  border-radius: 8px;
+  padding: 8px 10px;
+  border-radius: 6px;
   border: 1px solid var(--border-color);
   background-color: var(--input-bg);
   color: var(--text-color);
   font-family: 'Poppins', sans-serif;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .styled-select {
   appearance: none;
   background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
   background-repeat: no-repeat;
-  background-position: right 10px center;
-  background-size: 15px;
+  background-position: right 8px center;
+  background-size: 12px;
 }
+
+/* Estilos para los sliders */
+.slider-input {
+  width: calc(100% - 40px); /* Ajusta el ancho para dejar espacio al valor */
+  height: 4px;
+  background: var(--border-color);
+  outline: none;
+  border-radius: 2px;
+  -webkit-appearance: none; /* Eliminar estilos por defecto de Webkit */
+  appearance: none;
+  cursor: pointer;
+  vertical-align: middle; /* Alinea con el valor */
+  margin-right: 8px; /* Espacio entre slider y valor */
+}
+
+.slider-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, var(--tango-purple), var(--tango-pink));
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.slider-input::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, var(--tango-purple), var(--tango-pink));
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.slider-value {
+  display: inline-block;
+  min-width: 30px; /* Asegura espacio para el valor */
+  text-align: right;
+  font-size: 12px;
+  color: var(--text-color);
+  font-weight: 500;
+  vertical-align: middle; /* Alinea con el slider */
+}
+
 
 .range-inputs {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 12px;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
 /* Botones */
@@ -181,47 +246,28 @@ input[type="text"],
   background: linear-gradient(45deg, var(--tango-purple), var(--tango-pink));
   color: white;
   border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
+  padding: 10px 16px;
+  border-radius: 6px;
   width: 100%;
   font-weight: 500;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  font-size: 14px;
+  gap: 6px;
+  font-size: 13px;
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(154, 8, 242, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(154, 8, 242, 0.3);
 }
 
 .btn-secondary {
   background: var(--input-bg);
   color: var(--text-color);
   border: 1px solid var(--border-color);
-  padding: 10px 15px;
-  border-radius: 8px;
-  font-size: 13px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 10px;
-  transition: all 0.2s;
-}
-
-.btn-secondary:hover {
-  background: var(--border-color);
-}
-
-.btn-audio-test {
-  background: transparent;
-  color: var(--tango-purple);
-  border: 1px solid var(--tango-purple);
   padding: 8px 12px;
   border-radius: 6px;
   font-size: 12px;
@@ -233,22 +279,41 @@ input[type="text"],
   transition: all 0.2s;
 }
 
+.btn-secondary:hover {
+  background: var(--border-color);
+}
+
+.btn-audio-test {
+  background: transparent;
+  color: var(--tango-purple);
+  border: 1px solid var(--tango-purple);
+  padding: 6px 10px;
+  border-radius: 5px;
+  font-size: 11px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  transition: all 0.2s;
+}
+
 .btn-audio-test:hover {
   background: rgba(154, 8, 242, 0.1);
 }
 
 /* Iconos */
 .material-icons {
-  font-size: 18px;
+  font-size: 16px;
   vertical-align: middle;
 }
 
 /* Status */
 .status-message {
-  font-size: 13px;
+  font-size: 12px;
   text-align: center;
-  margin-top: 15px;
-  height: 20px;
+  margin-top: 12px;
+  height: 18px;
   color: var(--tango-pink);
   font-weight: 500;
 }
