@@ -36,6 +36,24 @@ document.addEventListener('DOMContentLoaded', () => {
             max: document.getElementById('rangeMax3'),
             msg: document.getElementById('message3'),
             audio: document.getElementById('audioSelect3')
+        },
+		{
+            min: document.getElementById('rangeMin4'),
+            max: document.getElementById('rangeMax4'),
+            msg: document.getElementById('message4'),
+            audio: document.getElementById('audioSelect4')
+        },
+		{
+            min: document.getElementById('rangeMin5'),
+            max: document.getElementById('rangeMax5'),
+            msg: document.getElementById('message5'),
+            audio: document.getElementById('audioSelect5')
+        },
+		{
+            min: document.getElementById('rangeMin6'),
+            max: document.getElementById('rangeMax6'),
+            msg: document.getElementById('message6'),
+            audio: document.getElementById('audioSelect6')
         }
     ];
 
@@ -45,7 +63,10 @@ document.addEventListener('DOMContentLoaded', () => {
         { file: "audio1.mp3", name: "Clip 2" },
         { file: "audio2.mp3", name: "Clip 3" },
         { file: "audio3.mp3", name: "Clip 4" },
-        { file: "audio4.mp3", name: "Clip 5" }
+        { file: "audio4.mp3", name: "Clip 5" },
+        { file: "audio5.mp3", name: "Clip 6" },
+        { file: "audio6.mp3", name: "Clip 7" },
+        { file: "audio7.mp3", name: "Clip 8" }
     ];
 
     // ========== FUNCIONES PRINCIPALES ========== //
@@ -214,17 +235,26 @@ document.addEventListener('DOMContentLoaded', () => {
             coinRanges: {
                 1: [parseInt(rangeConfigs[0].min.value) || 0, parseInt(rangeConfigs[0].max.value || 'Infinity')],
                 2: [parseInt(rangeConfigs[1].min.value) || 0, parseInt(rangeConfigs[1].max.value || 'Infinity')],
-                3: [parseInt(rangeConfigs[2].min.value) || 0, parseInt(rangeConfigs[2].max.value || 'Infinity')]
+                3: [parseInt(rangeConfigs[2].min.value) || 0, parseInt(rangeConfigs[2].max.value || 'Infinity')],
+			    4: [parseInt(rangeConfigs[3].min.value) || 0, parseInt(rangeConfigs[3].max.value || 'Infinity')],
+                5: [parseInt(rangeConfigs[4].min.value) || 0, parseInt(rangeConfigs[4].max.value || 'Infinity')],
+                6: [parseInt(rangeConfigs[5].min.value) || 0, parseInt(rangeConfigs[5].max.value || 'Infinity')]
             },
             coinMessages: {
                 1: rangeConfigs[0].msg.value.trim(),
                 2: rangeConfigs[1].msg.value.trim(),
-                3: rangeConfigs[2].msg.value.trim()
+                3: rangeConfigs[2].msg.value.trim(),
+				4: rangeConfigs[3].msg.value.trim(),
+                5: rangeConfigs[4].msg.value.trim(),
+                6: rangeConfigs[5].msg.value.trim()
             },
             giftAudios: {
                 1: rangeConfigs[0].audio.value || null,
                 2: rangeConfigs[1].audio.value || null,
-                3: rangeConfigs[2].audio.value || null
+                3: rangeConfigs[2].audio.value || null,
+				4: rangeConfigs[3].audio.value || null,
+                5: rangeConfigs[4].audio.value || null,
+                6: rangeConfigs[5].audio.value || null
             },
             darkMode: themeToggle.checked,
             gifterMode: gifterModeToggle.checked,
