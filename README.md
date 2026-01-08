@@ -1,4 +1,4 @@
-# SpeakChat By Jimmy v3.0
+# SpeakChat By Jimmy v3.1
 Developed by [jimmydragon96](https://github.com/jimmydragon96) || Desarrollado por [jimmydragon96](https://github.com/jimmydragon96) <br />
 [Website](https://speakchat.net/) | | [Sito web](https://speakchat.net/)
 
