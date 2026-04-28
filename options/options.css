@@ -1,0 +1,191 @@
+:root {
+  --tango-purple: #9a08f2;
+  --tango-pink: #ff0452;
+  --bg-color: #1a1a2e;
+  --card-bg: #16213e;
+  --text-color: #f0f0f0;
+  --border-color: #2d3748;
+  --input-bg: #2a2a3c;
+  --gradient: linear-gradient(45deg, var(--tango-purple), var(--tango-pink));
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.container { width: 100%; max-width: 1600px; }
+
+header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.gradient-text {
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid var(--border-color);
+}
+
+.card h2 {
+  font-size: 16px;
+  margin: 0 0 20px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-color);
+}
+
+/* GRID 3x2 Simétrico */
+#ranges {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.range-card {
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.range-card h4 {
+  margin: 0;
+  color: var(--tango-pink);
+  text-align: center;
+}
+
+/* INPUTS Y SELECTS (Eliminando el blanco) */
+input, select, textarea {
+  width: 100%;
+  background-color: var(--bg-color) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 8px;
+  font-family: inherit;
+  outline: none;
+}
+
+/* Estilo del Botón Probar con degradado */
+.test-btn {
+  background: var(--gradient) !important;
+  color: white !important;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: transform 0.2s;
+}
+
+.test-btn:hover { transform: scale(1.02); }
+
+/* Switch de estilo moderno */
+.switch { display: flex; align-items: center; gap: 15px; }
+
+.icon-svg { vertical-align: middle; }
+
+.status-message {
+  text-align: center;
+  color: #4ade80;
+  font-weight: 500;
+  margin-top: 20px;
+  opacity: 0;
+}
+
+/* Responsivo */
+@media (max-width: 700px) { #ranges { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 450px) { #ranges { grid-template-columns: 1fr; } }
+
+/* --- Añade o reemplaza estas secciones en tu options.css --- */
+
+/* Contenedor para la fila de dos columnas */
+.config-row {
+    display: flex;
+    gap: 20px;
+    align-items: stretch; /* Para que ambas tarjetas tengan la misma altura */
+}
+
+.col-small { flex: 1; }  /* Modo Gifter ocupa menos */
+.col-large { flex: 2; }  /* Lista Negra ocupa más */
+
+/* Estilo del Checkbox personalizado (Visto) */
+.switch-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.switch-container input {
+    display: none; /* Ocultamos el checkbox feo por defecto */
+}
+
+.custom-checkbox {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-color);
+    border-radius: 4px;
+    background: var(--bg-color);
+    position: relative;
+    transition: all 0.2s;
+}
+
+.switch-container input:checked + .custom-checkbox {
+    background: var(--gradient);
+    border-color: transparent;
+}
+
+.switch-container input:checked + .custom-checkbox::after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* Ajuste del Textarea para que no rompa la simetría */
+textarea#blacklist {
+    resize: none;
+    height: 60px; /* Altura compacta para alinear con la otra card */
+    margin-top: 5px;
+}
+
+/* Forzar que todos los inputs sean oscuros */
+input, select, textarea {
+    background-color: var(--bg-color) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-color) !important;
+}

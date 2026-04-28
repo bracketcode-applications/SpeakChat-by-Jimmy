@@ -12,6 +12,11 @@ tango-chat-speaker-pro/
 │   ├── popup.css             # Estilos CSS modernos
 │   └── popup.js              # Lógica del popup (temas, configuración)
 │
+├── options/                    # Carpeta de la interfaz
+│   ├── options.html            # Estructura HTML del popup
+│   ├── options.css             # Estilos CSS modernos
+│   └── options.js              # Lógica del popup (temas, configuración)
+│
 ├── icon.png                  # Icono de la extensión (128x128)
 │
 ├── content.js                # Script principal para Tango.me
