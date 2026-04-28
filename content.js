@@ -261,7 +261,7 @@ if (texts.length >= 2) {
                 if (!data.message || data.message.trim().length === 0) return;
 
                 // 🚫 blacklist
-                if (blacklist.map(u => u.toLowerCase()).includes(data.username.toLowerCase())) return;
+                if (blacklist.some(u => u.toLowerCase() === data.username.toLowerCase())) return;
 
                 // 🎁 modo gifter
                 if (gifterMode && !gifters.has(data.username)) return;
