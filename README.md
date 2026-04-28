@@ -8,9 +8,16 @@ This is a custom text-chat to speech extension intended to work with Chromium ba
 Esta es una extensión de chat de texto a voz personalizada diseñada para funcionar con navegadores basados ​​en Chromium. Esto fue desarrollado originalmente por [jimmydragon96](https://github.com/jimmydragon96) para su uso en la aplicación de redes sociales Tango, pero también se puede utilizar para otros casos de uso.
 
 ## Changes | Cambios
-- Actualizado para nuevos regalos de tango.
-- Modo Gifter (hablan solo los que envien regalos)
-- Controles para Volumen, Velocidad y Tono de voz.
+(English)
+- Added a dedicated panel for gift sounds,
+- Added a mode allowing only those who have sent gifts to speak, and a blacklist to prevent it from reading messages from spammers or disruptive users. 
+- In the popup menu, added the much-needed ON/OFF button.
+
+(Español)
+- Se ha añadido un panel dedicado para los sonidos de regalos.
+- Se ha añadido un modo que permite hablar únicamente a quienes han enviado regalos, así como una lista negra para impedir la lectura de mensajes de spammers o usuarios disruptivos.
+- En el menú emergente, se ha añadido el tan necesario botón de encendido/apagado.
+
 
 ## User Instructions | Instrucciones de uso
 
