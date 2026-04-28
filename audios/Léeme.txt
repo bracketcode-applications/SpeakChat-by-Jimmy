@@ -4,16 +4,21 @@ Sigue estos pasos para que tu extensión reproduzca tus propios clips de audio c
 
 1) Prepara tus archivos de audio:
   - Asegúrate de que tus clips estén en formato .mp3 y que sean cortos (máx. 30 seg.)
-  - Elige un máximo de 5 archivos de audio que quieras usar.
+  - Elige un máximo de 10 archivos de audio que quieras usar.
 
 2) Renombra tus archivos:
   - Cambia el nombre de tus archivos siguiendo esta estructura:
-     "audio0.mp3"
      "audio1.mp3"
      "audio2.mp3"
      "audio3.mp3"
      "audio4.mp3"
-  - Ejemplo: Si tienes un audio llamado gracias.mp3, renómbralo a audio0.mp3.
+     "audio5.mp3"
+     "audio6.mp3"
+     "audio7.mp3"
+     "audio8.mp3"
+     "audio9.mp3"
+     "audio10.mp3"
+  - Ejemplo: Si tienes un audio llamado gracias.mp3, renómbralo a audio1.mp3.
 
 3) Ubica la carpeta de la extensión:
 

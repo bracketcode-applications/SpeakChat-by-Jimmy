@@ -1,4 +1,4 @@
-// Solo necesario si usas eventos persistentes
-chrome.runtime.onInstalled.addListener(() => {
-  console.log('Extensión instalada');
-});
+// background.js
+// (por ahora solo para cumplir MV3)
+
+console.log('🔧 Background cargado');

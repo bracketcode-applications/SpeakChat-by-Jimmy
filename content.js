@@ -1,337 +1,345 @@
 // content.js
-// Este script se inyecta en la página tango.me para interactuar con el DOM y procesar mensajes/regalos.
-// ==UserScript==
-// @name         TNG SpeakChat
-// @description  Reproduce mensajes y regalos con voz personalizable y efectos de audio, para la pagina tango.me
-// @author       Jimmy - Microondas Creativos
-// @match        https://tango.me/*
-// @grant        none
-// @version      3.1.2 // Versión actualizada para reflejar los nuevos cambios de HTML
-// ==/UserScript==
 
-(function() {
+(function () {
     'use strict';
 
-    // ==================== CONFIGURACIÓN INICIAL ====================
-    let CONFIG = {
-        ENABLE_COIN_MESSAGES: true,
-        SELECTED_VOICE: null,
-        GIFTER_MODE: false,
-        IGNORED_PHRASES: ['empezó a ver', 'entró a la sala', 'salió de la sala'],
-        AUDIO_BASE_URL: chrome.runtime.getURL('audios/'),
-        COIN_RANGES: {
-            1: [1000, 5000],
-            2: [5001, 10000],
-            3: [10001, Infinity]
-        },
-        COIN_MESSAGES: {
-            1: '¡Qué generosidad!',
-            2: '¡Impresionante regalo!',
-            3: '¡Espectacular regalo!'
-        },
-        GIFT_AUDIOS: {
-            1: null,
-            2: null,
-            3: null
-        },
-        // Nuevas propiedades de configuración para voz
-        SPEECH_RATE: 1.0,
-        SPEECH_VOLUME: 1.0,
-        SPEECH_PITCH: 1.0
-    };
+    console.log('🚀 SpeakChat EXT iniciado');
 
-    // ==================== VARIABLES GLOBALES ====================
-    const readMessagesSet = new Set();
-    const giftSenders = new Set();
-    let lastSpokenUser = null;
+    const DEBUG = true;
+    const log = (...args) => DEBUG && console.log('[SpeakChat]', ...args);
 
-    // ==================== FUNCIONES PRINCIPALES ====================
+    let seen = new Set();
 
-    /**
-     * Limpia el texto de emojis y espacios extra.
-     * @param {string} text - El texto a limpiar.
-     * @param {boolean} isUsername - Indica si el texto es un nombre de usuario (para limpieza específica).
-     * @returns {string} El texto limpio.
-     */
-    function cleanText(text, isUsername = false) {
+    const IGNORED_USERS = [
+        'Tango Happy Hour',
+        'Battle Results:',
+        'Top Gifter:'
+    ];
+
+    let isEnabled = true;
+
+    let lastUser = null;
+    let lastTime = 0;
+    const RESET_TIME = 10000;
+
+    let speechQueue = [];
+    let isSpeaking = false;
+
+    let currentGiftAudio = null;
+
+    let gifterMode = false;
+    let blacklist = [];
+    let gifters = new Set();
+
+    // 🧼 limpiar texto + emojis
+    function cleanText(text) {
         if (!text) return '';
-        if (isUsername) {
-            // Elimina emojis de nombres de usuario
-            return text.replace(/[\p{Emoji}]/gu, '').trim();
-        }
-        return text.trim();
+        return text
+            .replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu, '')
+            .replace(/\s+/g, ' ')
+            .trim();
     }
 
-    /**
-     * Reproduce un archivo de audio.
-     * @param {string} audioFile - El nombre del archivo de audio a reproducir.
-     */
-    function playGiftAudio(audioFile) {
-        if (!audioFile) return;
+    // 🗣 hablar
+    function speak(text, user = null) {
+        if (!isEnabled) return;
 
-        const audio = new Audio(CONFIG.AUDIO_BASE_URL + audioFile);
-        audio.play().catch(e => {
-            console.error("SpeakChat: Error al reproducir audio:", e);
-            speak("Error al reproducir efecto de audio");
+        const now = Date.now();
+
+        if (now - lastTime > RESET_TIME) {
+            lastUser = null;
+        }
+
+        let finalText = text;
+
+        if (user && user !== lastUser) {
+            finalText = `${user} dice: ${text}`;
+            lastUser = user;
+        }
+
+        lastTime = now;
+
+        speechQueue.push(finalText);
+        processQueue();
+    }
+
+    // 🔊 procesar cola
+    function processQueue() {
+        if (!isEnabled) return;
+        if (isSpeaking || !speechQueue.length) return;
+
+        chrome.storage.sync.get(['voice', 'rate', 'pitch'], (settings) => {
+
+            const voices = speechSynthesis.getVoices();
+            if (!voices.length) return;
+
+            const text = speechQueue.shift();
+            const utter = new SpeechSynthesisUtterance(text);
+
+            if (settings.voice && voices[settings.voice]) {
+                utter.voice = voices[settings.voice];
+            }
+
+            utter.rate = parseFloat(settings.rate) || 1;
+            utter.pitch = parseFloat(settings.pitch) || 1;
+
+            isSpeaking = true;
+
+            utter.onend = () => {
+                isSpeaking = false;
+                processQueue();
+            };
+
+            utter.onerror = () => {
+                isSpeaking = false;
+                processQueue();
+            };
+
+            speechSynthesis.speak(utter);
+            log('🗣', text);
         });
     }
 
-    /**
-     * Sintetiza y reproduce texto usando la API de SpeechSynthesis.
-     * @param {string} text - El texto a reproducir.
-     * @param {string|null} currentUser - El nombre de usuario que envió el mensaje, si aplica.
-     */
-    function speak(text, currentUser = null) {
-        if (!window.speechSynthesis || !text) return;
+    // 🎁 manejar regalo
+    function handleGift(username, coins) {
 
-        const voices = window.speechSynthesis.getVoices();
-        if (voices.length === 0) {
-            console.warn("SpeakChat: No hay voces de síntesis de voz disponibles.");
-            return;
-        }
+        chrome.storage.sync.get(['giftSounds'], (data) => {
 
-        let selectedVoice = CONFIG.SELECTED_VOICE
-            ? voices.find(v => v.name === CONFIG.SELECTED_VOICE)
-            : voices[0];
+            if (!data.giftSounds) return;
 
-        if (!selectedVoice) selectedVoice = voices[0];
+            const coinValue = parseInt(coins.replace(/\./g, ''));
 
-        const finalText = currentUser
-            ? (currentUser === lastSpokenUser
-                ? `: ${text}`
-                : `${cleanText(currentUser, true)}: ${text}`)
-            : text;
+            const range = data.giftSounds.find(r =>
+                coinValue >= r.min && coinValue <= r.max
+            );
 
-        const utterance = new SpeechSynthesisUtterance(finalText);
-        utterance.voice = selectedVoice;
-        utterance.rate = CONFIG.SPEECH_RATE;
-        utterance.volume = CONFIG.SPEECH_VOLUME;
-        utterance.pitch = CONFIG.SPEECH_PITCH;
+            if (!range) return;
 
-        console.log('SpeakChat: Reproduciendo mensaje con configuración:', {
-            text: finalText,
-            voice: selectedVoice ? selectedVoice.name : 'N/A',
-            rate: utterance.rate,
-            volume: utterance.volume,
-            pitch: utterance.pitch
-        });
+            gifters.add(username);
 
-        window.speechSynthesis.speak(utterance);
-        lastSpokenUser = currentUser;
-    }
-
-    // ==================== PROCESAMIENTO GENERAL DE CHAT/REGALOS ====================
-
-    /**
-     * Procesa un elemento del DOM que representa un regalo o un mensaje de chat.
-     * @param {HTMLElement} element - El elemento DOM principal del evento de chat (e.g., .J_XGe o .qv4zS).
-     */
-    function processChatEvent(element) {
-        const giftPriceElement = element.querySelector('[data-testid="gift-price-coins-number"]');
-
-        if (giftPriceElement) {
-            if (!CONFIG.ENABLE_COIN_MESSAGES) return;
-
-            const usernameElement = element.querySelector('.peyuZ span');
-
-            if (!usernameElement) {
-                console.warn("SpeakChat: No se encontró el nombre de usuario para el evento de regalo.", element);
-                return;
+            // 🛑 detener audio anterior
+            if (currentGiftAudio) {
+                currentGiftAudio.pause();
+                currentGiftAudio = null;
             }
 
-            const username = cleanText(usernameElement.innerText, true);
-            let priceText = giftPriceElement.innerText.trim();
+            const speakMessage = () => {
+                if (range.message) {
+                    const msg = range.message
+                        .replace('{user}', username)
+                        .replace('{coins}', coins);
 
-            priceText = priceText.replace(/\./g, '');
-            const coins = parseInt(priceText, 10) || 0;
-
-            giftSenders.add(username);
-
-            let customMessage = '';
-            let audioFile = null;
-
-            for (const [key, range] of Object.entries(CONFIG.COIN_RANGES)) {
-                if (coins >= range[0] && coins <= range[1]) {
-                    customMessage = CONFIG.COIN_MESSAGES[key];
-                    audioFile = CONFIG.GIFT_AUDIOS[key];
-                    break;
+                    speak(msg);
                 }
-            }
+            };
 
-            const giftMessage = `${username} ha enviado ${priceText} monedas. ${customMessage}`;
+            if (range.audio) {
 
-            if (!readMessagesSet.has(giftMessage)) {
-                readMessagesSet.add(giftMessage);
-                speak(giftMessage);
-                if (audioFile) {
-                    playGiftAudio(audioFile);
-                }
-            }
-        } else {
-            const usernameElement = element.querySelector('.peyuZ span');
-            const messageElement = element.querySelector('.KR99L span');
+                const path = chrome.runtime.getURL(`audios/${range.audio}`);
+                const audio = new Audio(path);
 
-            if (!usernameElement || !messageElement) {
-                return;
-            }
+                currentGiftAudio = audio;
 
-            const username = usernameElement.innerText;
-            const message = messageElement.innerText;
+                audio.onended = () => {
+                    currentGiftAudio = null;
+                    speakMessage();
+                };
 
-            if (CONFIG.IGNORED_PHRASES.some(phrase => message.includes(phrase))) {
-                return;
-            }
-
-            if (CONFIG.GIFTER_MODE && !giftSenders.has(username)) {
-                return;
-            }
-
-            const fullMessage = `${username}: ${message}`;
-            if (!readMessagesSet.has(fullMessage)) {
-                readMessagesSet.add(fullMessage);
-                speak(message, username);
-            }
-        }
-    }
-
-    // ==================== GESTIÓN DE CONFIGURACIÓN ====================
-
-    function loadConfig() {
-        chrome.storage.sync.get([
-            'selectedVoice',
-            'coinRanges',
-            'coinMessages',
-            'giftAudios',
-            'gifterMode',
-            'speechRate',
-            'speechVolume',
-            'speechPitch'
-        ], (result) => {
-            if (result.selectedVoice) {
-                CONFIG.SELECTED_VOICE = result.selectedVoice;
-            }
-            if (result.coinRanges) {
-                for (const key in result.coinRanges) {
-                    if (result.coinRanges[key][1] === null) {
-                        result.coinRanges[key][1] = Infinity;
-                    }
-                }
-                Object.assign(CONFIG.COIN_RANGES, result.coinRanges);
-            }
-            if (result.coinMessages) {
-                Object.assign(CONFIG.COIN_MESSAGES, result.coinMessages);
-            }
-            if (result.giftAudios) {
-                Object.assign(CONFIG.GIFT_AUDIOS, result.giftAudios);
-            }
-            if (result.gifterMode !== undefined) {
-                CONFIG.GIFTER_MODE = result.gifterMode;
-            }
-            if (result.speechRate !== undefined) {
-                CONFIG.SPEECH_RATE = result.speechRate;
-            }
-            if (result.speechVolume !== undefined) {
-                CONFIG.SPEECH_VOLUME = result.speechVolume;
-            }
-            if (result.speechPitch !== undefined) {
-                CONFIG.SPEECH_PITCH = result.speechPitch;
-            }
-            console.log('SpeakChat: Configuración cargada:', CONFIG);
-        });
-    }
-
-    chrome.runtime.onMessage.addListener((request) => {
-        if (request.action === 'instantUpdate' && request.config) {
-            if (request.config.selectedVoice !== undefined) {
-                CONFIG.SELECTED_VOICE = request.config.selectedVoice;
-            }
-            if (request.config.coinRanges) {
-                for (const key in request.config.coinRanges) {
-                    if (request.config.coinRanges[key][1] === null) {
-                        request.config.coinRanges[key][1] = Infinity;
-                    }
-                }
-                Object.assign(CONFIG.COIN_RANGES, request.config.coinRanges);
-            }
-            if (request.config.coinMessages) {
-                Object.assign(CONFIG.COIN_MESSAGES, request.config.coinMessages);
-            }
-            if (request.config.giftAudios) {
-                Object.assign(CONFIG.GIFT_AUDIOS, request.config.giftAudios);
-            }
-            if (request.config.gifterMode !== undefined) {
-                CONFIG.GIFTER_MODE = request.config.gifterMode;
-            }
-            if (request.config.speechRate !== undefined) {
-                CONFIG.SPEECH_RATE = request.config.speechRate;
-            }
-            if (request.config.speechVolume !== undefined) {
-                CONFIG.SPEECH_VOLUME = request.config.speechVolume;
-            }
-            if (request.config.speechPitch !== undefined) {
-                CONFIG.SPEECH_PITCH = request.config.speechPitch;
-            }
-            console.log('SpeakChat: Configuración actualizada instantáneamente:', CONFIG);
-        }
-    });
-
-    // ==================== OBSERVADOR DEL DOM ====================
-
-    /**
-     * Inicializa el MutationObserver para detectar nuevos mensajes en el chat de Tango.me.
-     */
-    function initObserver() {
-        const observer = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-                if (!mutation.addedNodes.length) return;
-
-                mutation.addedNodes.forEach(node => {
-                    if (node.nodeType !== Node.ELEMENT_NODE) return;
-
-                    // El cambio clave está aquí: buscamos el contenedor J_XGe,
-                    // que es más estable que los contenedores externos.
-                    if (node.matches('.J_XGe')) {
-                        processChatEvent(node);
-                    } else {
-                        // Si el nodo añadido es un contenedor más grande, buscamos los elementos de chat/regalo dentro de él.
-                        const potentialElements = node.querySelectorAll('.J_XGe');
-                        potentialElements.forEach(el => {
-                            processChatEvent(el);
-                        });
-                    }
+                audio.play().catch(e => {
+                    log('Error playing gift audio:', e);
+                    currentGiftAudio = null;
                 });
-            });
-        });
 
-        observer.observe(document.body, {
-            childList: true,
-            subtree: true
+            } else {
+                speakMessage();
+            }
+
+            log('🎁 regalo detectado:', { username, coins });
         });
     }
 
-    // ==================== INICIALIZACIÓN DE VOCES ====================
+    // 🔍 contenedor chat
+    function getChatContainer() {
+        return document.querySelector('[data-testid="scrollable"]');
+    }
 
-    function initVoices() {
-        return new Promise((resolve) => {
-            const voices = window.speechSynthesis.getVoices();
-            if (voices.length > 0) {
-                resolve(voices);
-            } else {
-                window.speechSynthesis.onvoiceschanged = () => {
-                    resolve(window.speechSynthesis.getVoices());
+    // 🧠 parsear evento
+    function parseEvent(el) {
+
+        const spans = el.querySelectorAll('span');
+        const svgs = el.querySelectorAll('svg');
+
+        const texts = [];
+
+        spans.forEach(s => {
+            const t = cleanText(s.innerText);
+            if (t) texts.push(t);
+        });
+
+        if (!texts.length) return null;
+
+        // 🎁 regalo
+        if (svgs.length > 0) {
+
+            let coins = null;
+
+            texts.forEach(t => {
+                const numeric = t.replace(/\./g, '');
+                if (/^\d+$/.test(numeric)) {
+                    coins = t;
+                }
+            });
+
+            if (coins) {
+                const username = texts.find(t => t.length <= 25);
+
+                return {
+                    type: 'gift',
+                    username,
+                    coins
                 };
             }
+        }
+
+        // 💬 chat
+        // 💬 chat
+        if (texts.length >= 2) {
+
+            const username = texts[0];
+            const message = texts[texts.length - 1];
+
+            // 🚫 vacío (solo emojis)
+            if (!message || message.trim().length === 0) return null;
+
+            // 🚫 mensaje igual al username (bug típico Tango)
+            if (message.toLowerCase() === username.toLowerCase()) return null;
+
+            return {
+                type: 'chat',
+                username,
+                message
+            };
+        }
+
+        return null;
+    }
+
+    // 🔄 scan principal
+    function scan() {
+
+        if (!isEnabled) return;
+
+        const container = getChatContainer();
+        if (!container) return;
+
+        const events = container.querySelectorAll('[data-testid^="chat-event"]');
+
+        events.forEach(el => {
+
+            const id = el.getAttribute('data-testid');
+            if (!id || seen.has(id)) return;
+
+            seen.add(id);
+
+            const data = parseEvent(el);
+            if (!data) return;
+
+            // 🎁 REGALO
+            if (data.type === 'gift') {
+
+                lastUser = null;
+
+                handleGift(data.username, data.coins);
+
+                return;
+            }
+
+            // 💬 CHAT
+            if (data.type === 'chat') {
+
+                // 🚫 ignorar combos tipo "x2"
+                const comboMatch = data.message.trim().match(/^x\s?\d+$/i);
+                if (comboMatch) return;
+
+                // 🚫 seguridad extra (mensaje vacío)
+                if (!data.message || data.message.trim().length === 0) return;
+
+                // 🚫 blacklist
+                if (blacklist.some(u => u.toLowerCase() === data.username.toLowerCase())) return;
+
+                // 🎁 modo gifter
+                if (gifterMode && !gifters.has(data.username)) return;
+
+                if (IGNORED_USERS.includes(data.username)) return;
+
+                if (data.message.toLowerCase().includes('nuevo seguidor')) {
+                    lastUser = null;
+                    speak(`Muchas Gracias ${data.username} por Seguirme`);
+                    return;
+                }
+
+                if (data.message.includes('empezó a ver')) return;
+
+                speak(data.message, data.username);
+            }
         });
     }
 
-    // ==================== FUNCIÓN DE INICIO GLOBAL ====================
+    // 🔄 escuchar cambios
+    function listenSettings() {
+        chrome.storage.onChanged.addListener((changes) => {
 
-    (async function init() {
-        await initVoices();
-        loadConfig();
-        initObserver();
-        setInterval(loadConfig, 5000);
-    })();
+            if (changes.enabled) {
+                isEnabled = changes.enabled.newValue;
 
-    window.speechSynthesis.getVoices();
+                if (!isEnabled) {
+                    speechSynthesis.cancel();
+                    speechQueue = [];
+                    isSpeaking = false;
+
+                    if (currentGiftAudio) {
+                        currentGiftAudio.pause();
+                        currentGiftAudio = null;
+                    }
+                }
+            }
+
+            if (changes.gifterMode) {
+                gifterMode = changes.gifterMode.newValue;
+            }
+
+            if (changes.blacklist) {
+                blacklist = changes.blacklist.newValue || [];
+            }
+        });
+    }
+
+    // 🎤 esperar voces
+    function waitVoices() {
+        return new Promise(resolve => {
+            const voices = speechSynthesis.getVoices();
+            if (voices.length) return resolve();
+            speechSynthesis.onvoiceschanged = resolve;
+        });
+    }
+
+    async function init() {
+
+        chrome.storage.sync.get(['enabled', 'gifterMode', 'blacklist'], (data) => {
+            isEnabled = data.enabled !== false;
+            gifterMode = data.gifterMode || false;
+            blacklist = data.blacklist || [];
+        });
+
+        listenSettings();
+
+        await waitVoices();
+
+        log('🚀 SpeakChat corriendo');
+
+        setInterval(scan, 600);
+    }
+
+    init();
+
 })();
