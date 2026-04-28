@@ -55,7 +55,8 @@ testBtn.addEventListener('click', () => {
     const voices = speechSynthesis.getVoices();
     const utter = new SpeechSynthesisUtterance("Esta es una prueba de voz");
 
-    const selectedVoice = voices[voiceSelect.value];
+    const voiceIndex = parseInt(voiceSelect.value);
+    const selectedVoice = voices[voiceIndex];
     if (selectedVoice) utter.voice = selectedVoice;
 
     utter.rate = parseFloat(rateInput.value);
