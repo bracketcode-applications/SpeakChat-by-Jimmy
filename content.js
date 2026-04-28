@@ -145,7 +145,10 @@
                     speakMessage();
                 };
 
-                audio.play();
+                audio.play().catch(e => {
+                    log('Error playing gift audio:', e);
+                    currentGiftAudio = null;
+                });
 
             } else {
                 speakMessage();
