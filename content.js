@@ -199,23 +199,24 @@
         }
 
         // 💬 chat
-if (texts.length >= 2) {
+        // 💬 chat
+        if (texts.length >= 2) {
 
-    const username = texts[0];
-    const message = texts[texts.length - 1];
+            const username = texts[0];
+            const message = texts[texts.length - 1];
 
-    // 🚫 vacío (solo emojis)
-    if (!message || message.trim().length === 0) return null;
+            // 🚫 vacío (solo emojis)
+            if (!message || message.trim().length === 0) return null;
 
-    // 🚫 mensaje igual al username (bug típico Tango)
-    if (message.toLowerCase() === username.toLowerCase()) return null;
+            // 🚫 mensaje igual al username (bug típico Tango)
+            if (message.toLowerCase() === username.toLowerCase()) return null;
 
-    return {
-        type: 'chat',
-        username,
-        message
-    };
-}
+            return {
+                type: 'chat',
+                username,
+                message
+            };
+        }
 
         return null;
     }
