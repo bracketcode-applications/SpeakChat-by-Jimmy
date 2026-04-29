@@ -101,62 +101,68 @@
     }
 
     // 🎁 manejar regalo
-    function handleGift(username, coins) {
+function handleGift(username, coins) {
 
-        chrome.storage.sync.get(['giftSounds'], (data) => {
+    chrome.storage.sync.get(['giftSounds'], (data) => {
 
-            if (!data.giftSounds) return;
+        if (!data.giftSounds) return;
 
-            const coinValue = parseInt(coins.replace(/\./g, ''));
+        const coinValue = parseInt(coins.replace(/\./g, ''));
 
-            const range = data.giftSounds.find(r =>
-                coinValue >= r.min && coinValue <= r.max
-            );
+        const range = data.giftSounds.find(r =>
+            coinValue >= r.min && coinValue <= r.max
+        );
 
-            if (!range) return;
+        if (!range) return;
 
-            gifters.add(username);
+        gifters.add(username);
 
-            // 🛑 detener audio anterior
-            if (currentGiftAudio) {
-                currentGiftAudio.pause();
-                currentGiftAudio = null;
+        // 🗣 mensaje a decir
+        const speakMessage = () => {
+            if (range.message && range.message.trim().length > 0) {
+                const msg = range.message
+                    .replace('{user}', username)
+                    .replace('{coins}', coins);
+
+                speak(msg);
             }
+        };
 
-            const speakMessage = () => {
-                if (range.message) {
-                    const msg = range.message
-                        .replace('{user}', username)
-                        .replace('{coins}', coins);
+        // 🛑 detener audio anterior
+        if (currentGiftAudio) {
+            currentGiftAudio.pause();
+            currentGiftAudio = null;
+        }
 
-                    speak(msg);
-                }
-            };
+        // 🔥 CASO 1: SIN AUDIO
+        if (!range.audio || range.audio === 'none') {
+            log('🎁 regalo sin audio → solo voz');
+            speakMessage();
+            return;
+        }
 
-            if (range.audio) {
+        // 🔥 CASO 2: CON AUDIO
+        const path = chrome.runtime.getURL(`audios/${range.audio}`);
+        const audio = new Audio(path);
 
-                const path = chrome.runtime.getURL(`audios/${range.audio}`);
-                const audio = new Audio(path);
+        currentGiftAudio = audio;
 
-                currentGiftAudio = audio;
+        audio.onended = () => {
+            currentGiftAudio = null;
+            speakMessage();
+        };
 
-                audio.onended = () => {
-                    currentGiftAudio = null;
-                    speakMessage();
-                };
+        audio.onerror = () => {
+            // ⚠️ si falla el audio → igual hablar
+            currentGiftAudio = null;
+            speakMessage();
+        };
 
-                audio.play().catch(e => {
-                    log('Error playing gift audio:', e);
-                    currentGiftAudio = null;
-                });
+        audio.play();
 
-            } else {
-                speakMessage();
-            }
-
-            log('🎁 regalo detectado:', { username, coins });
-        });
-    }
+        log('🎁 regalo con audio:', { username, coins, audio: range.audio });
+    });
+}
 
     // 🔍 contenedor chat
     function getChatContainer() {
