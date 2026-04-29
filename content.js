@@ -101,7 +101,7 @@
     }
 
     // 🎁 manejar regalo
-function handleGift(username, coins) {
+    function handleGift(username, coins) {
 
     chrome.storage.sync.get(['giftSounds'], (data) => {
 
