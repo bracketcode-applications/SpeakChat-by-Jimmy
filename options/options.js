@@ -19,11 +19,12 @@ document.addEventListener('DOMContentLoaded', () => {
             <input type="number" id="min${i}" placeholder="Min">
             <input type="number" id="max${i}" placeholder="Max">
 
-            <select id="audio${i}">
-                ${Array.from({ length: 10 }, (_, j) =>
-                    `<option value="audio${j + 1}.mp3">Audio ${j + 1}</option>`
-                ).join('')}
-            </select>
+           <select id="audio${i}">
+           <option value="none">No Audio</option>
+           ${Array.from({ length: 10 }, (_, j) =>
+          `<option value="audio${j + 1}.mp3">Audio ${j + 1}</option>`
+           ).join('')}
+           </select>
 
             <input type="text" id="msg${i}" placeholder="Mensaje ({user} {coins})">
 

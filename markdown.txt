@@ -1,11 +1,12 @@
-tango-chat-speaker-pro/
+tango-chat-2026/
 │
-├── audios/                   # Carpeta con los efectos de audio
-│   ├── audio0.mp3            # Audio para rango 1 (ej. aplausos)
-│   ├── audio1.mp3            # Audio para rango 2 (ej. campanas)
-│   ├── audio2.mp3            # Audio para rango 3 (ej. fanfarria)
-│   ├── audio3.mp3            # Audio extra (opcional)
-│   └── audio4.mp3            # Audio extra (opcional)
+├── audios/                   # Carpeta con los efectos de audio (hasta 10 audios)
+│   ├── audio1.mp3            # Audio para rango 1
+│   ├── audio2.mp3            # Audio para rango 2
+│   ├── audio3.mp3            # Audio para rango 3
+│   ├── audio4.mp3            # Audio para rango 4
+│   └── audio5.mp3            # Audio para rango 5
+│   └── audio6.mp3            # Audio para rango 6
 │
 ├── popup/                    # Carpeta de la interfaz
 │   ├── popup.html            # Estructura HTML del popup
@@ -13,9 +14,9 @@ tango-chat-speaker-pro/
 │   └── popup.js              # Lógica del popup (temas, configuración)
 │
 ├── options/                    # Carpeta de la interfaz
-│   ├── options.html            # Estructura HTML del popup
+│   ├── options.html            # Estructura HTML de options
 │   ├── options.css             # Estilos CSS modernos
-│   └── options.js              # Lógica del popup (temas, configuración)
+│   └── options.js              # Lógica de options (temas, configuración)
 │
 ├── icon.png                  # Icono de la extensión (128x128)
 │
